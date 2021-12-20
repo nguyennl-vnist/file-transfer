@@ -6,7 +6,11 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Grid } from '@material-ui/core';
 import PdfToTxt from './components/pdfToTxt';
-
+import PdfToImage from './components/pdfToImage';
+import PdfToDoc from './components/pdfToDocx';
+import TxtToPdf from './components/txtToPdf';
+import ImageToPdf from './components/imageToPdf';
+import ZipFile from './components/zipFile';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -68,19 +72,19 @@ export default function BasicTabs() {
                             <PdfToTxt />
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                            Item Two
+                            <PdfToImage />
                         </TabPanel>
                         <TabPanel value={value} index={2}>
-                            Item Three
+                            <PdfToDoc />
                         </TabPanel>
                         <TabPanel value={value} index={3}>
-                            Item One
+                            <TxtToPdf />
                         </TabPanel>
                         <TabPanel value={value} index={4}>
-                            Item Two
+                            <ImageToPdf />
                         </TabPanel>
                         <TabPanel value={value} index={5}>
-                            Item Three
+                            <ZipFile />
                         </TabPanel>
                     </Box>
                 </Grid>
