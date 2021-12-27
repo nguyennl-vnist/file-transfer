@@ -1,6 +1,7 @@
 package com.nhom7.fileconverter.service;
 
 import java.io.*;
+import java.util.Random;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,12 +18,12 @@ public class TxtConversions {
 //	public static void main(String[] args) {
 //		parsePDF("Test.txt");
 //	}
-	public ByteArrayOutputStream parsePDF(MultipartFile multipartFile) throws IOException {
-		String fileName = multipartFile.getOriginalFilename();
+	public ByteArrayOutputStream parsePDF(byte[] bytes) throws IOException {
 		Document pdfDoc = new Document(PageSize.A4);
-		System.out.println("FileName = "+fileName);
 		ByteArrayOutputStream outputStream = null;
+		InputStream inputStream = null;
 		try {
+			inputStream = new ByteArrayInputStream(bytes);
 			outputStream = new ByteArrayOutputStream();
 			PdfWriter.getInstance(pdfDoc, outputStream)
 			  .setPdfVersion(PdfWriter.PDF_VERSION_1_7);
@@ -31,7 +32,7 @@ public class TxtConversions {
 			myfont.setStyle(Font.NORMAL);
 			myfont.setSize(11);
 			pdfDoc.add(new Paragraph("\n"));
-			BufferedReader br = new BufferedReader(new FileReader(multipartFile.getOriginalFilename()));
+			BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
 			String strLine;
 			while ((strLine = br.readLine()) != null) {
 			    Paragraph para = new Paragraph(strLine + "\n", myfont);
@@ -44,7 +45,7 @@ public class TxtConversions {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		FileOutputStream fileOutputStream = new FileOutputStream("root/"+fileName.substring(0,fileName.length()-4)+".pdf");
+		FileOutputStream fileOutputStream = new FileOutputStream("test.pdf");
 		outputStream.writeTo(fileOutputStream);
 		return outputStream;
 		

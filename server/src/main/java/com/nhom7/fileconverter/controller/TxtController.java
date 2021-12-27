@@ -28,7 +28,7 @@ public class TxtController {
 
 	@PostMapping
 	public ResponseEntity<FileResponse> toPDFFile(@RequestParam("file") MultipartFile file) throws IOException {
-		ByteArrayOutputStream outputStream = txtConversions.parsePDF(file);
+		ByteArrayOutputStream outputStream = txtConversions.parsePDF(file.getBytes());
 		return new ResponseEntity<FileResponse>(new FileResponse(outputStream.toByteArray()), HttpStatus.OK);
 	}
 
