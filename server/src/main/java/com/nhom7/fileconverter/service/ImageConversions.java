@@ -1,37 +1,31 @@
 package com.nhom7.fileconverter.service;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfWriter;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ImageConversions {
-	
-	public static void main(String[] args) {
-		parsePDF("Test.jpg");
-	}
-	public static void parsePDF(String fileName) {
+	public ByteArrayOutputStream parsePDF(byte[] bytes) {
 		Document document = new Document();
-//		String input = fileName + "." + extension;
-		String output = "Test" + ".pdf";
-		FileInputStream fis = null;
-		FileOutputStream fos;
+		ByteArrayOutputStream output = null;
 		try {
-			fis = new FileInputStream(fileName);
-			fos = new FileOutputStream(output);
-			PdfWriter writer = PdfWriter.getInstance(document, fos);
+//			input = new ByteArrayInputStream(bytes);
+			output = new ByteArrayOutputStream();
+			PdfWriter writer = PdfWriter.getInstance(document, output);
 			writer.open();
 			document.open();
-			document.add(Image.getInstance(fileName));
+			document.add(Image.getInstance(bytes));
 			document.close();
 			writer.close();
 		} catch (IOException | DocumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return output;
 	}
 }

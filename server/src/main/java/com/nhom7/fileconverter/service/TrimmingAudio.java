@@ -1,21 +1,16 @@
 package com.nhom7.fileconverter.service;
-
+import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
+//150
 public class TrimmingAudio extends AudioInputStream {
-
-	private final AudioInputStream stream;
-	private final long startByte, endByte;
+	private AudioInputStream stream;
+	private long startByte, endByte;
 	private long t_bytesRead = 0;
 
-public TrimmingAudio(AudioFormat audioFormat,AudioInputStream audioInputStream,long startMilli,long endMilli){
+public TrimmingAudio(AudioFormat audioFormat, AudioInputStream audioInputStream, long startMilli, long endMilli){
     super(new ByteArrayInputStream(new byte[0]),audioFormat,AudioSystem.NOT_SPECIFIED);
     stream=audioInputStream;
     //calculate where to start and where to end
@@ -128,10 +123,10 @@ public TrimmingAudio(AudioFormat audioFormat,AudioInputStream audioInputStream,l
         }
     }
 
-	public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
-		AudioInputStream music = null;
+//	public static void main(String[] args) throws UnsupportedAudioFileException, IOException {
+//		AudioInputStream music = null;
 //		music = AudioSystem.getAudioInputStream(new File("sample3.wav"));
 //		music = new TrimmingAudio(music.getFormat(), music, 0, 30000);
 //		AudioSystem.write(music, AudioFileFormat.Type.WAVE, new File("out.wav"));
-	}
+//	}
 }

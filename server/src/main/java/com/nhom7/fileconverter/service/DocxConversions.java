@@ -1,25 +1,20 @@
 package com.nhom7.fileconverter.service;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 import org.apache.poi.xwpf.converter.pdf.PdfConverter;
 import org.apache.poi.xwpf.converter.pdf.PdfOptions;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
-
+import org.springframework.stereotype.Service;
+//30
+@Service
 public class DocxConversions {
-	public static void main(String[] args) {
-		parsePDF("test.docx");
-	}
-	public static void parsePDF(String fileName) {
+	public ByteArrayOutputStream parsePDF(byte[] bytes) {
 		InputStream is = null;
-		OutputStream out = null;
+		ByteArrayOutputStream out = null;
 		try {
-			is = new FileInputStream(new File(fileName));
-			out = new FileOutputStream(new File("test.pdf"));
+			is = new ByteArrayInputStream(bytes);
+			out = new ByteArrayOutputStream();
 			long start = System.currentTimeMillis();
 			// 1) Load DOCX into XWPFDocument
 			XWPFDocument document = new XWPFDocument(is);
@@ -32,5 +27,6 @@ public class DocxConversions {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
+		return out;
 	}
 }
