@@ -24,6 +24,6 @@ cd server
 mvn spring-boot: run
 ```
 
-## Usage
+## Run
 
-App running on [localhost:3000](localhost:3000)
+App running on [localhost:3000](http://localhost:3000/)
