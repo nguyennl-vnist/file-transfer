@@ -64,8 +64,8 @@ export default function BasicTabs() {
                                 <Tab label="PDF -> IMAGE" {...a11yProps(1)} />
                                 <Tab label="PDF -> DOCX" {...a11yProps(2)} />
                                 <Tab label="TXT -> PDF" {...a11yProps(3)} />
-                                <Tab label="IMAGE -> PDF" {...a11yProps(4)} />
-                                <Tab label="ZIP FILE(S)/ FOLDER" {...a11yProps(5)} />
+                                {/* <Tab label="IMAGE -> PDF" {...a11yProps(4)} />
+                                <Tab label="ZIP FILE(S)/ FOLDER" {...a11yProps(5)} /> */}
                             </Tabs>
                         </Box>
                         <TabPanel value={value} index={0}>
@@ -80,12 +80,12 @@ export default function BasicTabs() {
                         <TabPanel value={value} index={3}>
                             <TxtToPdf />
                         </TabPanel>
-                        <TabPanel value={value} index={4}>
+                        {/* <TabPanel value={value} index={4}>
                             <ImageToPdf />
                         </TabPanel>
                         <TabPanel value={value} index={5}>
                             <ZipFile />
-                        </TabPanel>
+                        </TabPanel> */}
                     </Box>
                 </Grid>
                 <Grid item xs={2}></Grid>

@@ -4,6 +4,7 @@ import { AttachFile, Description, PictureAsPdf } from '@material-ui/icons';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 import axios from 'axios';
+import Box from '@mui/material/Box';
 
 function PdfToImage(props) {
     const [state, setState] = React.useState({ file: [], res: [] });
@@ -50,24 +51,27 @@ function PdfToImage(props) {
                 maxFileSize={30000000}
                 showPreviewsInDropzone={true}
             />
-            {file?.length && !res?.length ?
-                <LoadingButton
-                    onClick={handleConvert}
-                    loading={loading}
-                    variant="outlined"
-                >
-                    Convert
-                </LoadingButton>
-                :
-                <Button variant="outlined" disabled>
-                    Convert
-                </Button>}
-            {(res?.length) ?
-                <Button variant="outlined">
-                    Download
-                </Button>
-                : " "
-            }
+            <Box p={1}>
+                {file?.length && !res?.length ?
+                    <LoadingButton
+                        onClick={handleConvert}
+                        loading={loading}
+                        variant="outlined"
+                    >
+                        Convert
+                    </LoadingButton>
+                    :
+                    <Button variant="outlined" disabled>
+                        Convert
+                    </Button>}
+                {(res?.length) ?
+                    <Button variant="outlined">
+                        Download
+                    </Button>
+                    : " "
+                }
+            </Box>
+
         </React.Fragment>
 
 

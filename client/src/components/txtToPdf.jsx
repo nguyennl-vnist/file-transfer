@@ -13,23 +13,55 @@ function TxtToPdf(props) {
     const { file, res } = state
     function handleConvert() {
         setLoading(true);
-        axios.get("https://reqres.in/api/users?page=2")
-            .then((res) => {
-                console.log("res", res)
+        var bodyFormData = new FormData();
+        bodyFormData.append('file', file[0]);
+        axios({
+            method: "post",
+            url: "http://localhost:8080/api/txt-converter",
+            data: bodyFormData,
+            headers: { "Content-Type": "multipart/form-data" },
+        })
+            .then(function (response) {
                 setLoading(false)
                 setState({
                     ...state,
-                    res: res.data.data
+                    res: response.data.file
                 })
             })
-            .catch(err => console.log(err))
+            .catch(function (response) {
+                //handle error
+                console.log(response);
+            });
     }
+    function base64ToArrayBuffer(base64) {
+        var binaryString = window.atob(base64);
+        var binaryLen = binaryString.length;
+        var bytes = new Uint8Array(binaryLen);
+        for (var i = 0; i < binaryLen; i++) {
+            var ascii = binaryString.charCodeAt(i);
+            bytes[i] = ascii;
+        }
+        return bytes;
+    }
+    function saveByteArray(reportName, byte) {
+        var blob = new Blob([byte], { type: "application/pdf" });
+        console.log("blob", blob)
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        var fileName = reportName;
+        link.download = fileName;
+        link.click();
+    };
     const handleAddFile = (file) => {
         setState({
             ...state,
             file: file,
             res: []
         })
+    }
+    const handleDownload = () => {
+        let abc = base64ToArrayBuffer(res);
+        saveByteArray(file[0].name.replace(/\.[^/.]+$/, ""), abc);
     }
     const handlePreviewIcon = (fileObject, classes) => {
         const { type } = fileObject.file
@@ -65,7 +97,7 @@ function TxtToPdf(props) {
                         Convert
                     </Button>}
                 {(res?.length) ?
-                    <Button variant="outlined">
+                    <Button variant="outlined" onClick={handleDownload}>
                         Download
                     </Button>
                     : " "
