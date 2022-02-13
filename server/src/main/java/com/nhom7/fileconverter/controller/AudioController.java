@@ -22,14 +22,16 @@ import java.io.*;
 @RequestMapping("/api/trimming-audio")
 public class AudioController {
     @PostMapping("")
-    public ResponseEntity<FileResponse> trimmingAudio(@RequestParam("file") MultipartFile file,@RequestParam("start") long start,@RequestParam("end") long end) throws IOException, DocumentException, UnsupportedAudioFileException {
+    public ResponseEntity<FileResponse> trimmingAudio(@RequestParam("file") MultipartFile file,@RequestParam("start") String start,@RequestParam("end") String end) throws IOException, DocumentException, UnsupportedAudioFileException {
 //        ByteArrayOutputStream outputStream = imageConversions.parsePDF(file.getBytes());
 //        return new ResponseEntity<FileResponse>(new FileResponse(outputStream.toByteArray()), HttpStatus.OK);
+	Long startLong = Long.getLong(start);
+	Long endLong = Long.getLong(end);
         InputStream audioSrc = new ByteArrayInputStream(file.getBytes());
         InputStream bufferedIn = new BufferedInputStream(audioSrc);
         AudioInputStream music = AudioSystem.getAudioInputStream(bufferedIn);
 //		music = AudioSystem.getAudioInputStream();
-		music = new TrimmingAudio(music.getFormat(), music, start, end);
+		music = new TrimmingAudio(music.getFormat(), music, startLong, endLong);
         File output = new File("out.wav");
 		AudioSystem.write(music, AudioFileFormat.Type.WAVE, output);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
