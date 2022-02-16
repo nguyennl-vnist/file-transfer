@@ -10,7 +10,8 @@ import PdfToImage from './components/pdfToImage';
 import PdfToDoc from './components/pdfToDocx';
 import TxtToPdf from './components/txtToPdf';
 import ImageToPdf from './components/imageToPdf';
-import ZipFile from './components/zipFile';
+import AudioTrimming from './components/audioTrimming';
+import DocxToPdf from './components/docxToPdf';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -45,7 +46,7 @@ function a11yProps(index) {
 }
 
 export default function BasicTabs() {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = React.useState(5);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -64,8 +65,9 @@ export default function BasicTabs() {
                                 <Tab label="PDF -> IMAGE" {...a11yProps(1)} />
                                 <Tab label="PDF -> DOCX" {...a11yProps(2)} />
                                 <Tab label="TXT -> PDF" {...a11yProps(3)} />
-                                {/* <Tab label="IMAGE -> PDF" {...a11yProps(4)} />
-                                <Tab label="ZIP FILE(S)/ FOLDER" {...a11yProps(5)} /> */}
+                                <Tab label="DOCX -> PDF" {...a11yProps(4)} />
+                                <Tab label="Image -> PDF" {...a11yProps(5)} />
+                                <Tab label="Audio Trimming" {...a11yProps(6)} />
                             </Tabs>
                         </Box>
                         <TabPanel value={value} index={0}>
@@ -80,12 +82,15 @@ export default function BasicTabs() {
                         <TabPanel value={value} index={3}>
                             <TxtToPdf />
                         </TabPanel>
-                        {/* <TabPanel value={value} index={4}>
-                            <ImageToPdf />
+                        <TabPanel value={value} index={4}>
+                            <DocxToPdf />
                         </TabPanel>
                         <TabPanel value={value} index={5}>
-                            <ZipFile />
-                        </TabPanel> */}
+                            <ImageToPdf />
+                        </TabPanel>
+                        <TabPanel value={value} index={6}>
+                            <AudioTrimming />
+                        </TabPanel>
                     </Box>
                 </Grid>
                 <Grid item xs={2}></Grid>

@@ -48,7 +48,7 @@ function PdfToTxt(props) {
         console.log("blob", blob)
         var link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
-        var fileName = reportName;
+        var fileName = reportName + ".txt";
         link.download = fileName;
         link.click();
     };
@@ -74,6 +74,7 @@ function PdfToTxt(props) {
     console.log("state", state)
     return (
         <React.Fragment>
+            PDF TO TXT
             <DropzoneArea
                 acceptedFiles={[".pdf"]}
                 onChange={handleAddFile}

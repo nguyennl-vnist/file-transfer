@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 import axios from 'axios';
 import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
 
 function PdfToImage(props) {
     const [state, setState] = React.useState({ file: [], res: [] });
@@ -13,17 +14,46 @@ function PdfToImage(props) {
     const { file, res } = state
     function handleConvert() {
         setLoading(true);
-        axios.get("https://reqres.in/api/users?page=2")
-            .then((res) => {
-                console.log("res", res)
+        var bodyFormData = new FormData();
+        bodyFormData.append('file', file[0]);
+        axios({
+            method: "post",
+            url: "http://localhost:8080/api/pdf-converter/toImages",
+            data: bodyFormData,
+            headers: { "Content-Type": "multipart/form-data" },
+        })
+            .then(function (response) {
+                console.log("Res", response)
                 setLoading(false)
                 setState({
                     ...state,
-                    res: res.data.data
+                    res: response.data
                 })
             })
-            .catch(err => console.log(err))
+            .catch(function (response) {
+                //handle error
+                console.log(response);
+            });
     }
+    function base64ToArrayBuffer(base64) {
+        var binaryString = window.atob(base64);
+        var binaryLen = binaryString.length;
+        var bytes = new Uint8Array(binaryLen);
+        for (var i = 0; i < binaryLen; i++) {
+            var ascii = binaryString.charCodeAt(i);
+            bytes[i] = ascii;
+        }
+        return bytes;
+    }
+    function saveByteArray(reportName, byte) {
+        var blob = new Blob([byte], { type: "image/jpg" });
+        console.log("blob", blob)
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        var fileName = reportName;
+        link.download = fileName;
+        link.click();
+    };
     const handleAddFile = (file) => {
         setState({
             ...state,
@@ -31,17 +61,25 @@ function PdfToImage(props) {
             res: []
         })
     }
+    const handleDownload = (name, item) => {
+        console.log("item", item)
+        let abc = base64ToArrayBuffer(item.file);
+        saveByteArray(name, abc);
+
+
+    }
     const handlePreviewIcon = (fileObject, classes) => {
         const { type } = fileObject.file
         const iconProps = {
             className: classes.image,
         }
-        return <PictureAsPdf {...iconProps} />
+        return <Description {...iconProps} />
     }
 
     console.log("state", state)
     return (
         <React.Fragment>
+            PDF TO IMAGE
             <DropzoneArea
                 acceptedFiles={["application/pdf"]}
                 onChange={handleAddFile}
@@ -63,15 +101,21 @@ function PdfToImage(props) {
                     :
                     <Button variant="outlined" disabled>
                         Convert
-                    </Button>}
-                {(res?.length) ?
-                    <Button variant="outlined">
-                        Download
                     </Button>
-                    : " "
                 }
             </Box>
+            {res?.length ?
+                res.map((item, index) => (
+                    <div key={index}>
+                        {"page-" + (index + 1)}
+                        <button variant="outlined" onClick={() => handleDownload("page-" + (index + 1), item)}>
+                            Download
+                        </button>
 
+                    </div>
+                ))
+                : ""
+            }
         </React.Fragment>
 
 

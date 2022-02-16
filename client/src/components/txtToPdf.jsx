@@ -15,9 +15,10 @@ function TxtToPdf(props) {
         setLoading(true);
         var bodyFormData = new FormData();
         bodyFormData.append('file', file[0]);
+        console.log(bodyFormData)
         axios({
             method: "post",
-            url: "http://localhost:8080/api/txt-converter",
+            url: "http://localhost:8080/api/txt-converter/toPDF",
             data: bodyFormData,
             headers: { "Content-Type": "multipart/form-data" },
         })
@@ -60,6 +61,7 @@ function TxtToPdf(props) {
         })
     }
     const handleDownload = () => {
+        console.log("res", res)
         let abc = base64ToArrayBuffer(res);
         saveByteArray(file[0].name.replace(/\.[^/.]+$/, ""), abc);
     }
@@ -74,6 +76,7 @@ function TxtToPdf(props) {
     console.log("state", state)
     return (
         <React.Fragment>
+            TXT TO PDF
             <DropzoneArea
                 acceptedFiles={[".txt"]}
                 onChange={handleAddFile}
