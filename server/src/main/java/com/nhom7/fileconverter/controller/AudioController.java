@@ -25,8 +25,8 @@ public class AudioController {
     public ResponseEntity<FileResponse> trimmingAudio(@RequestParam("file") MultipartFile file,@RequestParam("start") String start,@RequestParam("end") String end) throws IOException, DocumentException, UnsupportedAudioFileException {
 //        ByteArrayOutputStream outputStream = imageConversions.parsePDF(file.getBytes());
 //        return new ResponseEntity<FileResponse>(new FileResponse(outputStream.toByteArray()), HttpStatus.OK);
-	Long startLong = Long.parseLong(start);
-	Long endLong = Long.parseLong(end);
+	    Long startLong = Long.parseLong(start);
+	    Long endLong = Long.parseLong(end);
         InputStream audioSrc = new ByteArrayInputStream(file.getBytes());
         InputStream bufferedIn = new BufferedInputStream(audioSrc);
         AudioInputStream music = AudioSystem.getAudioInputStream(bufferedIn);

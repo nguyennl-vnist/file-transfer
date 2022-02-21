@@ -8,7 +8,7 @@ import java.io.IOException;
 public class TrimmingAudio extends AudioInputStream {
 	private AudioInputStream stream;
 	private long startByte, endByte;
-	private long t_bytesRead = 0;
+	private long t_bytesRead = 0;//byte thứ bao nhiêu
 
 public TrimmingAudio(AudioFormat audioFormat, AudioInputStream audioInputStream, long startMilli, long endMilli){
     super(new ByteArrayInputStream(new byte[0]),audioFormat,AudioSystem.NOT_SPECIFIED);
@@ -20,30 +20,35 @@ public TrimmingAudio(AudioFormat audioFormat, AudioInputStream audioInputStream,
 
 	@Override
 	public int available() throws IOException {
+    //return số byte còn phải đọc
 		return (int) (endByte - startByte - t_bytesRead);
 	}
 
 	public int read(byte[] abData, int nOffset, int nLength) throws IOException {
 		int bytesRead = 0;
+		//nếu mới đọc đến byte thứ n < start byte(byte đầu tiên cần đọc)
 		if (t_bytesRead < startByte) {
 			do {
-				bytesRead = (int) skip(startByte - t_bytesRead);
+			    //skip khoảng đó để bắt đầu đọc từ startbyte
+				bytesRead = (int) skip(startByte - t_bytesRead); //30 20
 				t_bytesRead += bytesRead;
 			} while (t_bytesRead < startByte);
 		}
-		if (t_bytesRead >= endByte)// end reached. signal EOF
+		if (t_bytesRead >= endByte)// end reached. signal EOF (end of file)
 			return -1;
-
+        //số byte tối đa đọc trong bộ nhớ đệm buffer bytesRead
 		bytesRead = stream.read(abData, 0, nLength);
+		//không có byte nào,hoặc đã đọc hết
 		if (bytesRead == -1)
 			return -1;
 		else if (bytesRead == 0)
 			return 0;
-
+        //đọc tiếp số byte = bytesRead
 		t_bytesRead += bytesRead;
+		//nếu vượt quá end byte thì chỉ đọc đến endbyte thôi
 		if (t_bytesRead >= endByte)// "trim" the extra by altering the number of bytes read
 			bytesRead = (int) (bytesRead - (t_bytesRead - endByte));
-
+            System.out.println("HUHUHU");
 		return bytesRead;
 	}
 	
@@ -59,21 +64,24 @@ public TrimmingAudio(AudioFormat audioFormat, AudioInputStream audioInputStream,
         AudioInputStream convert2AIS = null;
 
         try{
-            bais = new ByteArrayInputStream(sourceBytes);
-            sourceAIS = AudioSystem.getAudioInputStream(bais);
-            AudioFormat sourceFormat = sourceAIS.getFormat();
+            bais = new ByteArrayInputStream(sourceBytes);//lấy từ đầu vào
+            sourceAIS = AudioSystem.getAudioInputStream(bais);//convert thành audio stream
+            AudioFormat sourceFormat = sourceAIS.getFormat();//lấy format cuẩ audio stream trên
             AudioFormat convertFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, sourceFormat.getSampleRate(), 16, sourceFormat.getChannels(), sourceFormat.getChannels()*2, sourceFormat.getSampleRate(), false);
             convert1AIS = AudioSystem.getAudioInputStream(convertFormat, sourceAIS);
-            convert2AIS = AudioSystem.getAudioInputStream(audioFormat, convert1AIS);
+            convert2AIS = AudioSystem.getAudioInputStream(audioFormat, convert1AIS);//convert về dạng audio theo yêu cầu đầu vào
 
             baos = new ByteArrayOutputStream();
 
-            byte [] buffer = new byte[8192];
+            byte [] buffer = new byte[8192];//khai báo mảng byte cs 8192 phần tử
             while(true){
+                //đọc từ 0 -> length -1
                 int readCount = convert2AIS.read(buffer, 0, buffer.length);
                 if(readCount == -1){
+                    //đã đọc hết thì break
                     break;
                 }
+                //ghi vào file ouput
                 baos.write(buffer, 0, readCount);
             }
             return baos.toByteArray();
