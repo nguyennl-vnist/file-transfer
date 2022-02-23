@@ -92,28 +92,15 @@ function WaveformContainer() {
                 console.log(response);
             });
     }
-    function base64ToArrayBuffer(base64) {
-        var binaryString = window.atob(base64);
-        var binaryLen = binaryString.length;
-        var bytes = new Uint8Array(binaryLen);
-        for (var i = 0; i < binaryLen; i++) {
-            var ascii = binaryString.charCodeAt(i);
-            bytes[i] = ascii;
-        }
-        return bytes;
+    function downloadBase64File(contentType, base64Data, fileName) {
+        const linkSource = `data:${contentType};base64,${base64Data}`;
+        const downloadLink = document.createElement("a");
+        downloadLink.href = linkSource;
+        downloadLink.download = fileName;
+        downloadLink.click();
     }
-    function saveByteArray(reportName, byte) {
-        var blob = new Blob([byte], { type: "audio/wav" });
-        console.log("blob", blob)
-        var link = document.createElement('a');
-        link.href = window.URL.createObjectURL(blob);
-        var fileName = reportName;
-        link.download = fileName;
-        link.click();
-    };
     const handleDownload = () => {
-        let abc = base64ToArrayBuffer(res);
-        saveByteArray(file.name.replace(/\.[^/.]+$/, ""), abc);
+        downloadBase64File("audio/wav", res, file.name.replace(/\.[^/.]+$/, ""));
     }
     console.log("state", state)
     return (
@@ -174,4 +161,4 @@ function WaveformContainer() {
 
 }
 
-export default WaveformContainer;
+export default React.memo(WaveformContainer);

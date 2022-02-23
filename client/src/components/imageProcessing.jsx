@@ -6,7 +6,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 
-function TxtToPdf(props) {
+function ImageProcessing(props) {
     const [state, setState] = React.useState({ file: [], res: [] });
     const [loading, setLoading] = React.useState(false);
 
@@ -18,11 +18,12 @@ function TxtToPdf(props) {
         console.log(bodyFormData)
         axios({
             method: "post",
-            url: "http://localhost:8080/api/txt-converter/toPDF",
+            url: "http://localhost:8080/api/image-processing/write-text",
             data: bodyFormData,
             headers: { "Content-Type": "multipart/form-data" },
         })
             .then(function (response) {
+                console.log("response.data", typeof response.data.file, response.data.file)
                 setLoading(false)
                 setState({
                     ...state,
@@ -34,6 +35,7 @@ function TxtToPdf(props) {
                 console.log(response);
             });
     }
+
     function downloadBase64File(contentType, base64Data, fileName) {
         const linkSource = `data:${contentType};base64,${base64Data}`;
         const downloadLink = document.createElement("a");
@@ -41,7 +43,6 @@ function TxtToPdf(props) {
         downloadLink.download = fileName;
         downloadLink.click();
     }
-
     const handleAddFile = (file) => {
         setState({
             ...state,
@@ -50,26 +51,20 @@ function TxtToPdf(props) {
         })
     }
     const handleDownload = () => {
-        downloadBase64File("application/pdf", res, file[0].name.replace(/\.[^/.]+$/, ""));
-    }
-    const handlePreviewIcon = (fileObject, classes) => {
-        const { type } = fileObject.file
-        const iconProps = {
-            className: classes.image,
-        }
-        return <Description {...iconProps} />
+        console.log("res", res)
+        downloadBase64File("image/jpg", res, file[0].name.replace(/\.[^/.]+$/, ""));
     }
 
     console.log("state", state)
+    console.log("imgUrl", "data:image/jpeg;charset=utf-8;base64," + res)
     return (
         <React.Fragment>
-            TXT TO PDF
+            IMAGE TO PDF
             <DropzoneArea
-                acceptedFiles={[".txt"]}
+                acceptedFiles={['image/*']}
                 onChange={handleAddFile}
                 filesLimit={1}
                 showFileNames={true}
-                getPreviewIcon={handlePreviewIcon}
                 maxFileSize={30000000}
                 showPreviewsInDropzone={true}
             />
@@ -87,16 +82,23 @@ function TxtToPdf(props) {
                         Convert
                     </Button>}
                 {(res?.length) ?
-                    <Button variant="outlined" onClick={handleDownload}>
-                        Download
-                    </Button>
+                    <React.Fragment>
+                        <Button variant="outlined" onClick={() => handleDownload()}>
+                            Download
+                        </Button>
+                        <div style={{ paddingTop: "10px" }}>
+                            <img src={"data:image/jpeg;charset=utf-8;base64," + res} alt="" style={{ height: "100%", width: "100%" }} />
+                        </div>
+                    </React.Fragment>
+
                     : " "
                 }
             </Box>
+
         </React.Fragment>
 
 
     );
 }
 
-export default TxtToPdf;
+export default ImageProcessing;

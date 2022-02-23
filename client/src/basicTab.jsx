@@ -12,6 +12,7 @@ import TxtToPdf from './components/txtToPdf';
 import ImageToPdf from './components/imageToPdf';
 import AudioTrimming from './components/audioTrimming';
 import DocxToPdf from './components/docxToPdf';
+import ImageProcessing from './components/imageProcessing';
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -56,44 +57,48 @@ export default function BasicTabs() {
     return (
         <React.Fragment>
             <Grid container>
-                <Grid item xs={2}></Grid>
-                <Grid item xs={8}>
+                <Grid item xs={1}></Grid>
+                <Grid item xs={10}>
                     <Box sx={{ width: '100%', justifyContent: "center", textAlign: "center", alignItems: "center" }}>
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                                 <Tab label="PDF -> TXT" {...a11yProps(0)} />
-                                <Tab label="PDF -> IMAGE" {...a11yProps(1)} />
-                                <Tab label="PDF -> DOCX" {...a11yProps(2)} />
-                                <Tab label="TXT -> PDF" {...a11yProps(3)} />
-                                <Tab label="DOCX -> PDF" {...a11yProps(4)} />
-                                <Tab label="Image -> PDF" {...a11yProps(5)} />
+                                <Tab label="TXT -> PDF" {...a11yProps(1)} />
+                                <Tab label="PDF -> IMAGE" {...a11yProps(2)} />
+                                <Tab label="Image -> PDF" {...a11yProps(3)} />
+                                <Tab label="PDF -> DOCX" {...a11yProps(4)} />
+                                <Tab label="DOCX -> PDF" {...a11yProps(5)} />
                                 <Tab label="Audio Trimming" {...a11yProps(6)} />
+                                <Tab label="Image Processing" {...a11yProps(7)} />
                             </Tabs>
                         </Box>
                         <TabPanel value={value} index={0}>
                             <PdfToTxt />
                         </TabPanel>
                         <TabPanel value={value} index={1}>
-                            <PdfToImage />
-                        </TabPanel>
-                        <TabPanel value={value} index={2}>
-                            <PdfToDoc />
-                        </TabPanel>
-                        <TabPanel value={value} index={3}>
                             <TxtToPdf />
                         </TabPanel>
+                        <TabPanel value={value} index={2}>
+                            <PdfToImage />
+                        </TabPanel>
+                        <TabPanel value={value} index={3}>
+                            <ImageToPdf />
+                        </TabPanel>
                         <TabPanel value={value} index={4}>
-                            <DocxToPdf />
+                            <PdfToDoc />
                         </TabPanel>
                         <TabPanel value={value} index={5}>
-                            <ImageToPdf />
+                            <DocxToPdf />
                         </TabPanel>
                         <TabPanel value={value} index={6}>
                             <AudioTrimming />
                         </TabPanel>
+                        <TabPanel value={value} index={7}>
+                            <ImageProcessing />
+                        </TabPanel>
                     </Box>
                 </Grid>
-                <Grid item xs={2}></Grid>
+                <Grid item xs={1}></Grid>
             </Grid>
 
         </React.Fragment>

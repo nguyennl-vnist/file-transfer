@@ -83,15 +83,17 @@ public class PDFConversions {
 	}
 
 	public List<ByteArrayOutputStream> parseImage(byte[] bytes) throws IOException {
+		// khai báo document 
 		PDDocument document;
-		InputStream inputStream = null;
+		// khai báo outputStream
 		ByteArrayOutputStream outputStream = null;
+
 		FileOutputStream fileOutputStream = new FileOutputStream("test.pdf");
 		fileOutputStream.write(bytes);
 		File f = new File("test.pdf");
+
 		List<ByteArrayOutputStream> byteArrayOutputStreams = new ArrayList<>();
 		try {
-//			inputStream = new ByteArrayInputStream(bytes);
 			document = PDDocument.load(f);
 			PDFRenderer pdfRenderer = new PDFRenderer(document);
 			for (int page = 0; page < document.getNumberOfPages(); ++page) {

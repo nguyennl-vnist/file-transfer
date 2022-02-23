@@ -6,7 +6,7 @@ import React, {
 import WaveSurfer from "wavesurfer.js";
 import RegionsPlugin from "wavesurfer.js/dist/plugin/wavesurfer.regions.min";
 
-export default function Waveform(props) {
+function Waveform(props) {
 
     const [state, setState] = useState({
         wavesurfer: null,
@@ -90,12 +90,12 @@ export default function Waveform(props) {
             regions[keys[0]].remove();
         }
     });
-    console.log("state 2", state)
     return (
         <div ref={waveformRef} />
     );
 }
 
+export default React.memo(Waveform)
 Waveform.defaultProps = {
     src: ""
 };

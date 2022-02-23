@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ImageConversions {
 	public ByteArrayOutputStream parsePDF(byte[] bytes) {
+		// khai báo document để copy từ document sang output
 		Document document = new Document();
-		ByteArrayOutputStream output = null;
+		// khai báo output
+		ByteArrayOutputStream output = new ByteArrayOutputStream();;
 		try {
-//			input = new ByteArrayInputStream(bytes);
-			output = new ByteArrayOutputStream();
+			// PdfWriter để hỗ trợ việc viết pdf ra ouput (công cụ để chuyển đổi có đầu vào là 1 document trắng và output)
 			PdfWriter writer = PdfWriter.getInstance(document, output);
 			writer.open();
 			document.open();
