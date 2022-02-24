@@ -56,7 +56,7 @@ export default function BasicTabs() {
 
     return (
         <React.Fragment>
-            <Grid container>
+            <Grid container >
                 <Grid item xs={1}></Grid>
                 <Grid item xs={10}>
                     <Box sx={{ width: '100%', justifyContent: "center", textAlign: "center", alignItems: "center" }}>

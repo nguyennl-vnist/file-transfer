@@ -105,7 +105,7 @@ public class ImageProcessingService {
         {
             for (int lx = 0, rx = width - 1; lx < width; lx++, rx--)
             {
-                int p = img2.getRGB(lx, y);
+                int p = img1.getRGB(lx, y);
                 img2.setRGB(rx, y, p);
             }
         }

@@ -3,13 +3,21 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import { AttachFile, Description, PictureAsPdf } from '@material-ui/icons';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 
 function ImageProcessing(props) {
     const [state, setState] = React.useState({ file: [], res: [] });
     const [loading, setLoading] = React.useState(false);
+    const [type, setType] = React.useState('mirror-image');
 
+    const handleChange = (event) => {
+        setType(event.target.value);
+    };
     const { file, res } = state
     function handleConvert() {
         setLoading(true);
@@ -18,7 +26,7 @@ function ImageProcessing(props) {
         console.log(bodyFormData)
         axios({
             method: "post",
-            url: "http://localhost:8080/api/image-processing/write-text",
+            url: "http://localhost:8080/api/image-processing/" + type,
             data: bodyFormData,
             headers: { "Content-Type": "multipart/form-data" },
         })
@@ -59,7 +67,7 @@ function ImageProcessing(props) {
     console.log("imgUrl", "data:image/jpeg;charset=utf-8;base64," + res)
     return (
         <React.Fragment>
-            IMAGE TO PDF
+            IMAGE PROCESSING
             <DropzoneArea
                 acceptedFiles={['image/*']}
                 onChange={handleAddFile}
@@ -68,6 +76,23 @@ function ImageProcessing(props) {
                 maxFileSize={30000000}
                 showPreviewsInDropzone={true}
             />
+            <Box p={1}>
+                <FormControl >
+                    <InputLabel id="demo-simple-select-label">Filter</InputLabel>
+                    <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={type}
+                        label="Type"
+                        onChange={handleChange}
+                    >
+                        <MenuItem value={'mirror-image'}>Mirror Image</MenuItem>
+                        <MenuItem value={'negative-color'}>Invert Color</MenuItem>
+                        <MenuItem value={'write-text'}>Add Watermark</MenuItem>
+                    </Select>
+                </FormControl>
+            </Box>
+
             <Box p={1}>
                 {file?.length && !res?.length ?
                     <LoadingButton
@@ -87,7 +112,7 @@ function ImageProcessing(props) {
                             Download
                         </Button>
                         <div style={{ paddingTop: "10px" }}>
-                            <img src={"data:image/jpeg;charset=utf-8;base64," + res} alt="" style={{ height: "100%", width: "100%" }} />
+                            <img src={"data:image/jpeg;charset=utf-8;base64," + res} alt="" style={{ width: "100%" }} />
                         </div>
                     </React.Fragment>
 
